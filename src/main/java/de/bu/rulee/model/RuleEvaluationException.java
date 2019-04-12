@@ -8,4 +8,8 @@ public class RuleEvaluationException extends Exception {
 		super(message, cause);
 	}
 
+	public RuleEvaluationException(Exception source) {
+		super(source);
+	}
+
 }

@@ -12,8 +12,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.bu.rulee.model.Dimension;
 import de.bu.rulee.model.Rule;
+import de.bu.rulee.model.dimension.Dimension;
 
 @Stateless
 @Path("rules")

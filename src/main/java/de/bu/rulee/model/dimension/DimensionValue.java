@@ -1,4 +1,4 @@
-package de.bu.rulee.model;
+package de.bu.rulee.model.dimension;
 
 /**
  * Represents the value of a Dimension which is evaluated against a Dimensional.

@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import de.bu.rulee.entity.DimensionRepository;
-import de.bu.rulee.model.Dimension;
-import de.bu.rulee.model.DimensionMapper;
 import de.bu.rulee.model.Rule;
+import de.bu.rulee.model.dimension.Dimension;
+import de.bu.rulee.model.dimension.DimensionMapper;
 
 public class RuleService {
 

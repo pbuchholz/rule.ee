@@ -1,4 +1,4 @@
-package de.bu.rulee.model;
+package de.bu.rulee.model.dimension;
 
 /**
  * Represents an operation which is performed on a {@link Dimension} and a rule

@@ -1,4 +1,4 @@
-package de.bu.rulee.model;
+package de.bu.rulee.model.dimension;
 
 import java.util.ArrayList;
 import java.util.List;

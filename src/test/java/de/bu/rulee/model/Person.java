@@ -1,9 +1,12 @@
 package de.bu.rulee.model;
 
+import de.bu.rulee.model.dimension.Dimensional;
+
 public class Person {
 
 	private String firstName;
 	private String surname;
+	private Insurance insurance;
 
 	@Dimensional(dimension = "marketing-channels")
 	private boolean readsNewsletter;
@@ -43,6 +46,14 @@ public class Person {
 		this.age = age;
 	}
 
+	public Insurance getInsurance() {
+		return this.insurance;
+	}
+
+	public void setInsurance(Insurance insurance) {
+		this.insurance = insurance;
+	}
+
 	public Person() {
 		/* Default constructor. */
 	}
@@ -52,6 +63,14 @@ public class Person {
 		this.surname = surname;
 		this.age = age;
 		this.readsNewsletter = readsNewsletter;
+	}
+
+	public Person(String firstName, String surname, int age, boolean readsNewsletter, Insurance insurance) {
+		this.firstName = firstName;
+		this.surname = surname;
+		this.age = age;
+		this.readsNewsletter = readsNewsletter;
+		this.insurance = insurance;
 	}
 
 }

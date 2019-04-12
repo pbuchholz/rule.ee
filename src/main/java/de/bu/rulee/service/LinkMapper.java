@@ -4,9 +4,9 @@ import javax.inject.Inject;
 
 import de.bu.rulee.entity.DimensionOperationEntity;
 import de.bu.rulee.entity.LinkEntity;
-import de.bu.rulee.model.DimensionMapper;
-import de.bu.rulee.model.DimensionOperation;
 import de.bu.rulee.model.Link;
+import de.bu.rulee.model.dimension.DimensionMapper;
+import de.bu.rulee.model.dimension.DimensionOperation;
 
 public class LinkMapper implements Mapper<LinkEntity, Link> {
 

@@ -1,17 +1,24 @@
-package de.bu.rulee.model;
+package de.bu.rulee.model.dimension;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
+import de.bu.rulee.model.Link;
+import de.bu.rulee.model.LogicalOperator;
+import de.bu.rulee.model.LogicalResult;
 import de.bu.rulee.model.LogicalResult.LogicalResultPart;
+import de.bu.rulee.model.Rule;
+import de.bu.rulee.model.RuleEvaluationException;
+import de.bu.rulee.model.RuleEvaluator;
 
 public class DimensionalRuleEvaluator implements RuleEvaluator {
+
+	@Inject
+	private DimensionOperationEvaluator dimensionOperationEvaluator;
 
 	@Override
 	public RuleEvaluationResult evaluateRule(Rule rule, Object candidate) throws RuleEvaluationException {
@@ -37,7 +44,7 @@ public class DimensionalRuleEvaluator implements RuleEvaluator {
 	private LogicalResult<Link> evaluateLogicalResults(Link link, Object candidate) throws RuleEvaluationException {
 		LogicalResult.Builder<Link> builder = LogicalResult.<Link>builder();
 		do {
-			boolean result = this.evaluateLink(link, candidate);
+			boolean result = this.evaluateDimensionOperation(link.getDimensionOperation(), candidate);
 			builder.logicalResultPart(result, link);
 			link = link.getNext();
 		} while (null != link);
@@ -96,59 +103,40 @@ public class DimensionalRuleEvaluator implements RuleEvaluator {
 						.count() > 0);
 	}
 
-	private boolean evaluateLink(Link link, Object candidate) throws RuleEvaluationException {
-		String dimensionalValue = this.inspectDimensional(link, candidate);
-		assert (null != dimensionalValue);
+	private boolean evaluateDimensionOperation(DimensionOperation dimensionOperation, Object candidate)
+			throws RuleEvaluationException {
 
-		DimensionOperator operator = link.getDimensionOperation().getDimensionOperator();
-		String selectedValue = link.getDimensionOperation().getSelectedDimensionValue().getValue();
+		try {
+			String dimensionalValue = this.dimensionOperationEvaluator.evaluate(dimensionOperation, candidate);
+			assert (null != dimensionalValue);
 
-		switch (link.getDimensionOperation().getDimensionOperator()) {
-		case EQ:
-			return dimensionalValue.equals(selectedValue);
-		case NEQ:
-			return !dimensionalValue.equals(selectedValue);
-		case GT:
-		case LT:
-			if (this.bothAreNumbers(selectedValue, dimensionalValue)) {
-				BigDecimal selectedBd = NumberUtils.createBigDecimal(selectedValue);
-				BigDecimal dimensionalBd = NumberUtils.createBigDecimal(dimensionalValue);
+			DimensionOperator operator = dimensionOperation.getDimensionOperator();
+			String selectedValue = dimensionOperation.getSelectedDimensionValue().getValue();
 
-				return (operator == DimensionOperator.GT) ? dimensionalBd.compareTo(selectedBd) == 1
-						: dimensionalBd.compareTo(selectedBd) == -1;
+			switch (dimensionOperation.getDimensionOperator()) {
+			case EQ:
+				return dimensionalValue.equals(selectedValue);
+			case NEQ:
+				return !dimensionalValue.equals(selectedValue);
+			case GT:
+			case LT:
+				if (this.bothAreNumbers(selectedValue, dimensionalValue)) {
+					BigDecimal selectedBd = NumberUtils.createBigDecimal(selectedValue);
+					BigDecimal dimensionalBd = NumberUtils.createBigDecimal(dimensionalValue);
+
+					return (operator == DimensionOperator.GT) ? dimensionalBd.compareTo(selectedBd) == 1
+							: dimensionalBd.compareTo(selectedBd) == -1;
+				}
 			}
-		}
 
-		return false;
+			return false;
+		} catch (DimensionalInspectionException e) {
+			throw new RuleEvaluationException(e);
+		}
 	}
 
 	private boolean bothAreNumbers(String left, String right) {
 		return NumberUtils.isCreatable(left) && NumberUtils.isCreatable(right);
-	}
-
-	private String inspectDimensional(Link link, Object candidate) throws RuleEvaluationException {
-		String dimensionalValue = null;
-
-		for (Field dimensionalField : readDimensionalFields(candidate)) {
-			Dimensional dimensional = dimensionalField.getAnnotation(Dimensional.class);
-			if (dimensional.dimension().equals(link.getDimensionOperation().getDimension().getName())) {
-				dimensionalField.setAccessible(true);
-				try {
-					dimensionalValue = String.valueOf(dimensionalField.get(candidate));
-					break;
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					throw new RuleEvaluationException("Could not inspect Dimensional of candidate.", e);
-				}
-			}
-		}
-
-		return dimensionalValue;
-	}
-
-	private List<Field> readDimensionalFields(Object candidate) {
-		return Stream.of(candidate.getClass().getDeclaredFields()) //
-				.filter(field -> field.isAnnotationPresent(Dimensional.class)) //
-				.collect(Collectors.toList());
 	}
 
 }

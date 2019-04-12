@@ -1,4 +1,4 @@
-package de.bu.rulee.model;
+package de.bu.rulee.model.dimension;
 
 import javax.enterprise.context.Dependent;
 

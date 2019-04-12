@@ -13,7 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import de.bu.rulee.model.DimensionOperator;
+import de.bu.rulee.model.dimension.DimensionOperator;
 
 @Entity
 @Table(name = "dimensionoperations")

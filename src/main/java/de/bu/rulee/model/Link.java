@@ -1,5 +1,7 @@
 package de.bu.rulee.model;
 
+import de.bu.rulee.model.dimension.DimensionOperation;
+
 public class Link {
 
 	private DimensionOperation dimensionOperation;
