@@ -53,7 +53,18 @@ public class DimensionOperation {
 
 		public class DimensionValueBuilder {
 
-			public Builder selectDimensionValue(String dimensionValueName) {
+			public Builder direct(DimensionValue dimensionValue) {
+
+				/* DimensionValue must be available in Dimension. */
+				if (!dimensionOperation.dimension.hasDimensionValue(dimensionValue.getName())) {
+					throw new RuntimeException("DimensionValue not in Dimension. Cannot build DimensionOperation.");
+				}
+
+				dimensionOperation.selectedDimensionValue = dimensionValue;
+				return Builder.this;
+			}
+
+			public Builder findAndSelect(String dimensionValueName) {
 				DimensionValue dimensionValue = dimensionOperation.dimension.findDimensionValue(dimensionValueName);
 				dimensionOperation.selectedDimensionValue = dimensionValue;
 				return Builder.this;

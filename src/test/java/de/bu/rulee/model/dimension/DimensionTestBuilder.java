@@ -8,7 +8,7 @@ public final class DimensionTestBuilder {
 
 	}
 
-	public static Dimension buildInsuranceTypeDimension() {
+	public static Dimension buildInsurancesDimension() {
 		return Dimension.builder() //
 				.name("insurance-types") //
 				.dimensionValue(DimensionValue.builder() //

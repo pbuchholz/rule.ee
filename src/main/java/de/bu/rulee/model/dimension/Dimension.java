@@ -2,6 +2,7 @@ package de.bu.rulee.model.dimension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A {@link Dimension} represents a named range of possible values which are
@@ -32,11 +33,19 @@ public class Dimension {
 	}
 
 	public DimensionValue findDimensionValue(String dimensionValueName) {
-		return this.dimensionValues.stream() //
-				.filter((v) -> v.getName().contentEquals(dimensionValueName)) //
-				.findFirst() //
+		return this.filterFor(dimensionValueName) //
 				.get();
+	}
 
+	public boolean hasDimensionValue(String dimensionValueName) {
+		return this.filterFor(dimensionValueName) //
+				.isPresent();
+	}
+
+	private Optional<DimensionValue> filterFor(String dimensionValueName) {
+		return this.dimensionValues.stream() //
+				.filter((v) -> v.getName().equals(dimensionValueName)) //
+				.findFirst();
 	}
 
 	public static Builder builder() {

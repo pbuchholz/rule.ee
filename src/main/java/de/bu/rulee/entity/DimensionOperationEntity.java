@@ -1,6 +1,5 @@
 package de.bu.rulee.entity;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -32,15 +31,14 @@ public class DimensionOperationEntity {
 	@JoinColumn(name = "dimension", referencedColumnName = "id")
 	private DimensionEntity dimension;
 
-	@Basic
-	@Column(name = "selecteddimensionvalue")
-	private String selectedDimensionValue;
+	@OneToOne
+	private DimensionValueEntity selectedDimensionValue;
 
-	public String getSelectedDimensionValue() {
+	public DimensionValueEntity getSelectedDimensionValue() {
 		return selectedDimensionValue;
 	}
 
-	public void setSelectedDimensionValue(String selectedDimensionValue) {
+	public void setSelectedDimensionValue(DimensionValueEntity selectedDimensionValue) {
 		this.selectedDimensionValue = selectedDimensionValue;
 	}
 
@@ -73,10 +71,11 @@ public class DimensionOperationEntity {
 	}
 
 	public DimensionOperationEntity(long id, DimensionOperator operator, DimensionEntity dimension,
-			String selectedValue) {
+			DimensionValueEntity selectedDimensionValue) {
 		this.id = id;
 		this.operator = operator;
 		this.dimension = dimension;
+		this.selectedDimensionValue = selectedDimensionValue;
 	}
 
 	public static Builder builder() {
@@ -103,6 +102,11 @@ public class DimensionOperationEntity {
 
 		public Builder dimension(DimensionEntity dimension) {
 			this.dimensionOperationEntity.dimension = dimension;
+			return this;
+		}
+
+		public Builder selectDimensionValue(DimensionValueEntity selectedDimensionValue) {
+			this.dimensionOperationEntity.setSelectedDimensionValue(selectedDimensionValue);
 			return this;
 		}
 

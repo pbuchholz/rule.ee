@@ -1,6 +1,6 @@
 package de.bu.rulee.model.dimension;
 
-import static de.bu.rulee.model.dimension.DimensionTestBuilder.buildInsuranceTypeDimension;
+import static de.bu.rulee.model.dimension.DimensionTestBuilder.buildInsurancesDimension;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -33,8 +33,8 @@ public class ReflectiveDimensionOperationEvaluatorTest {
 
 	private DimensionOperation buildCarInsuranceDimensionOperation() {
 		return DimensionOperation.builder() //
-				.dimension(buildInsuranceTypeDimension())//
-				.selectDimensionValue("car-insurance")//
+				.dimension(buildInsurancesDimension())//
+				.findAndSelect("car-insurance")//
 				.dimensionOperator(DimensionOperator.EQ)//
 				.build();
 	}

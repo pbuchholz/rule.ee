@@ -2,6 +2,7 @@ package de.bu.rulee.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -77,11 +78,40 @@ public class DimensionEntity {
 	}
 
 	public void addDimensionValue(DimensionValueEntity dimensionValue) {
-		if (null == this.dimensionValues) {
+		if (Objects.isNull(this.dimensionValues)) {
 			this.dimensionValues = new ArrayList<>();
 		}
 
 		this.dimensionValues.add(dimensionValue);
+	}
+
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+
+		private DimensionEntity dimensionEntity;
+
+		public Builder id(long id) {
+			this.dimensionEntity.id = id;
+			return this;
+		}
+
+		public Builder name(String name) {
+			this.dimensionEntity.name = name;
+			return this;
+		}
+
+		public Builder dimensionValue(DimensionValueEntity dimensionValue) {
+			dimensionEntity.addDimensionValue(dimensionValue);
+			return this;
+		}
+
+		public DimensionEntity build() {
+			return this.dimensionEntity;
+		}
+
 	}
 
 }

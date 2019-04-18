@@ -12,14 +12,19 @@ import de.bu.rulee.model.dimension.DimensionMapper;
 
 public class RuleService {
 
-	@Inject
 	private DimensionRepository ruleStore;
 
-	@Inject
 	private DimensionMapper dimensionMapper;
 
-	@Inject
 	private RuleMapper ruleMapper;
+
+	@Inject
+	public RuleService(DimensionMapper dimensionMapper, RuleMapper ruleMapper,
+			DimensionRepository dimensionRepository) {
+		this.ruleMapper = ruleMapper;
+		this.dimensionMapper = dimensionMapper;
+		this.ruleStore = dimensionRepository;
+	}
 
 	public List<Dimension> retrieveAllDimensions() {
 		return this.ruleStore.findAllDimensions().stream() //

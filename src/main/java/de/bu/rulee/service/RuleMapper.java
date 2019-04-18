@@ -7,8 +7,12 @@ import de.bu.rulee.model.Rule;
 
 public class RuleMapper implements Mapper<RuleEntity, Rule> {
 
-	@Inject
 	private LinkMapper linkMapper;
+
+	@Inject
+	public RuleMapper(LinkMapper linkMapper) {
+		this.linkMapper = linkMapper;
+	}
 
 	@Override
 	public Rule map(RuleEntity input) {

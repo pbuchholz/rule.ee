@@ -1,8 +1,8 @@
 package de.bu.rulee.model;
 
-import de.bu.rulee.model.Link;
-import de.bu.rulee.model.LogicalOperator;
-import de.bu.rulee.model.dimension.Dimension;
+import static de.bu.rulee.model.dimension.DimensionTestBuilder.buildAgeGroupsDimension;
+import static de.bu.rulee.model.dimension.DimensionTestBuilder.buildMarketingChannelsDimension;
+
 import de.bu.rulee.model.dimension.DimensionOperation;
 import de.bu.rulee.model.dimension.DimensionOperator;
 
@@ -12,26 +12,26 @@ public class LinkTestBuilder {
 
 	}
 
-	public static Link.Builder buildLowRiskLink(Dimension ageGroupsDimension) {
+	public static Link.Builder buildLowRiskLink() {
 		return Link.builder() //
 				.dimensionOperation(DimensionOperation.builder() //
-						.dimension(ageGroupsDimension)//
-						.selectDimensionValue("low risk persons") //
+						.dimension(buildAgeGroupsDimension())//
+						.findAndSelect("low risk persons") //
 						.dimensionOperator(DimensionOperator.GT)//
 						.build()) //
 				.logicalOperator(LogicalOperator.AND) //
 				.dimensionOperation(DimensionOperation.builder() //
-						.dimension(ageGroupsDimension)//
-						.selectDimensionValue("middle risk persons") //
+						.dimension(buildAgeGroupsDimension())//
+						.findAndSelect("middle risk persons") //
 						.dimensionOperator(DimensionOperator.LT)//
 						.build());
 	}
 
-	public static Link.Builder buildNewsletterReaderLink(Dimension marketingChannelsDimension) {
+	public static Link.Builder buildNewsletterReaderLink() {
 		return Link.builder() //
 				.dimensionOperation(DimensionOperation.builder() //
-						.dimension(marketingChannelsDimension)//
-						.selectDimensionValue("newsletter") //
+						.dimension(buildMarketingChannelsDimension())//
+						.findAndSelect("newsletter") //
 						.dimensionOperator(DimensionOperator.EQ)//
 						.build());
 	}
