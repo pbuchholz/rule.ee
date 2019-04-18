@@ -28,4 +28,11 @@ public class DimensionRepository {
 		return query.getResultList();
 	}
 
+	public RuleEntity findOneRule(String name) {
+		TypedQuery<RuleEntity> query = entityManager //
+				.createNamedQuery(RuleEntity.FIND_ONE_RULE, RuleEntity.class);
+		query.setParameter("name", name);
+		return query.getSingleResult();
+	}
+
 }

@@ -13,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import de.bu.rulee.model.Rule;
+import de.bu.rulee.model.RuleEvaluationException;
+import de.bu.rulee.model.RuleEvaluator.RuleEvaluationResult;
 import de.bu.rulee.model.dimension.Dimension;
 
 @Stateless
@@ -38,11 +40,17 @@ public class RuleBoundary {
 	@POST
 	@Path("/evaluations")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public <T> Response evaluateRule(Rule rule, T candidate) {
-
-		// TODO Set HttpLink header to refer to actual evaluation
-
-		// TODO
+	public <T> Response evaluateRule(String ruleName, T candidate) {
+		
+		try {
+			RuleEvaluationResult result = this.ruleService.evaluateRule(ruleName, candidate);
+			return Response.ok(result).build();
+		} catch (RuleEvaluationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+			// TODO Response code handling.
+		}
 		return null;
 	}
 

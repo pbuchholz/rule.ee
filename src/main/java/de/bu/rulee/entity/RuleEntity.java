@@ -16,10 +16,13 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "rules")
-@NamedQueries({ @NamedQuery(name = RuleEntity.FIND_ALL_RULES, query = "SELECT rule from RuleEntity rule") })
+@NamedQueries({ //
+		@NamedQuery(name = RuleEntity.FIND_ALL_RULES, query = "SELECT rule FROM RuleEntity rule"), //
+		@NamedQuery(name = RuleEntity.FIND_ONE_RULE, query = "SELECT rule FROM RulEntity rule WHERE rule.name = :name") })
 public class RuleEntity {
 
 	public static final String FIND_ALL_RULES = "findAllRules";
+	public static final String FIND_ONE_RULE = "findOneRule";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,18 +5,32 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import de.bu.rulee.entity.DimensionEntity;
 import de.bu.rulee.entity.DimensionRepository;
+import de.bu.rulee.entity.RuleEntity;
 import de.bu.rulee.model.Rule;
+import de.bu.rulee.model.RuleEvaluationException;
+import de.bu.rulee.model.RuleEvaluator;
+import de.bu.rulee.model.RuleEvaluator.RuleEvaluationResult;
 import de.bu.rulee.model.dimension.Dimension;
 import de.bu.rulee.model.dimension.DimensionMapper;
+import de.bu.rulee.model.dimension.EvaluationMethod;
+import de.bu.rulee.model.dimension.EvaluationMethod.EvaluationMethods;
 
 public class RuleService {
 
+	@Inject
 	private DimensionRepository ruleStore;
 
-	private DimensionMapper dimensionMapper;
+	@Inject
+	private Mapper<DimensionEntity, Dimension> dimensionMapper;
 
-	private RuleMapper ruleMapper;
+	@Inject
+	private Mapper<RuleEntity, Rule> ruleMapper;
+
+	@Inject
+	@EvaluationMethod(method = EvaluationMethods.REFLECTIVE_DIMENSIONAL)
+	private RuleEvaluator ruleEvaluator;
 
 	@Inject
 	public RuleService(DimensionMapper dimensionMapper, RuleMapper ruleMapper,
@@ -36,6 +50,15 @@ public class RuleService {
 		return this.ruleStore.findAllRules().stream() //
 				.map(ruleMapper::map) //
 				.collect(Collectors.toList());
+	}
+
+	public Rule retrieveOneRule(String name) {
+		return ruleMapper.map(this.ruleStore.findOneRule(name));
+	}
+
+	public <T> RuleEvaluationResult evaluateRule(String ruleName, T candidate) throws RuleEvaluationException {
+		Rule rule = this.retrieveOneRule(ruleName);
+		return this.ruleEvaluator.evaluateRule(rule, candidate);
 	}
 
 }

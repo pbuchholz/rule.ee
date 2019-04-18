@@ -14,7 +14,9 @@ import de.bu.rulee.model.LogicalResult.LogicalResultPart;
 import de.bu.rulee.model.Rule;
 import de.bu.rulee.model.RuleEvaluationException;
 import de.bu.rulee.model.RuleEvaluator;
+import de.bu.rulee.model.dimension.EvaluationMethod.EvaluationMethods;
 
+@EvaluationMethod(method = EvaluationMethods.REFLECTIVE_DIMENSIONAL)
 public class DimensionalRuleEvaluator implements RuleEvaluator {
 
 	@Inject
